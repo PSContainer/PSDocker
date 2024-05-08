@@ -8,7 +8,6 @@ SHELL ["/bin/bash","-l", "-c"]
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
-
     apt-get -y install gcc mono-mcs && \
     rm -rf /var/lib/apt/lists/*
 
@@ -21,7 +20,6 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     apt-get -y install python-dev && \
     rm -rf /var/lib/apt/lists/*
-  #  apt-get install -y nvidia-container-toolkit && \
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update -y && \
@@ -36,12 +34,15 @@ RUN apt-get update -y && \
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 && \
     apt-get install libx11-6 && \
-  #   apt-get install build-essential && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install build-essential -y
-RUN apt-get update && apt-get install libstdc++6 && apt-get install freeglut3-dev -y && \
-    apt-get update && apt-get install python3-pip python3.8-dev python3.8-distutils python3.8-venv -y
+RUN apt-get update && apt-get install libstdc++6 && apt-get install freeglut3-dev -y 
+
+# modification for DECO
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update && apt-get install freeglut3-dev -y 
+
 

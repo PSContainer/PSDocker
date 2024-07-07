@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.7.1-devel-ubuntu20.04
+FROM nvidia/cuda:11.7.1-cudnn8-devel-ubuntu22.04
 
 LABEL maintainer="Anaconda, Inc"
 
@@ -54,13 +54,12 @@ RUN set -x && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda clean -afy
 
-ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     apt-get install -y g++ gcc && \
     apt-get install --yes software-properties-common && \
     apt-get install apt-transport-https ca-certificates -y && \
     apt-get clean && \
-    apt-get install -y zip unzip && \
+    apt-get install zip unzip && \
     rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && apt-get install -y \
@@ -75,14 +74,3 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     apt-get -y install nano vim && \
     rm -rf /var/lib/apt/lists/*
-
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 && \
-    apt-get install libx11-6 && \
-  #   apt-get install build-essential && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install build-essential -y
-RUN apt-get update && apt-get install libstdc++6 && apt-get install freeglut3-dev -y

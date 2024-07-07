@@ -45,4 +45,9 @@ RUN apt-get update && apt-get install libstdc++6 && apt-get install freeglut3-de
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install freeglut3-dev -y 
 
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update && \
+    apt-get -y install nano vim && \
+    rm -rf /var/lib/apt/lists/*
+
 

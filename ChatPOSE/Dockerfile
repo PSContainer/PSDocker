@@ -3,7 +3,7 @@ FROM nvidia/cuda:11.7.1-devel-ubuntu20.04
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
-# hadolint ignore=DL3008
+# in the original
 RUN apt-get update -q && \
     apt-get install -q -y --no-install-recommends \
         bzip2 \
@@ -54,33 +54,43 @@ RUN set -x && \
     /opt/conda/bin/conda clean -afy
 
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && \
-    apt-get install -y g++ gcc && \
-    apt-get install --yes software-properties-common && \
-    apt-get install apt-transport-https ca-certificates -y && \
-    apt-get clean && \
-    apt-get install -y zip unzip && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update &&  \ 
+    apt-get install -y g++-7 gcc-7 &&  \   
+    apt-get install --yes software-properties-common && \    
+    apt-get install apt-transport-https ca-certificates -y &&   \  
+    apt-get clean &&   \  
+    apt-get install -y zip unzip && \    
+    rm -rf /var/lib/apt/lists/* 
+    # buildkit
 
+# in the original
 RUN apt-get update && apt-get install -y \
     libglu1-mesa-dev \
     freeglut3-dev \
     mesa-common-dev && \
     rm -rf /var/lib/apt/lists/*
-
+# in the original
 RUN apt-get update && apt-get install -y xvfb 
 
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && \
-    apt-get -y install nano vim && \
-    rm -rf /var/lib/apt/lists/*
+# Setting noninteractive environment to suppress UI-related prompts during build
+ENV DEBIAN_FRONTEND=noninteractive
 
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 && \
-    apt-get install libx11-6 && \
+# Running multiple apt-get commands in a single RUN to minimize layers, improve cache utilization, and reduce image size
+RUN apt-get update && \
+    apt-get install -y \
+    nano \
+    vim \
+    ffmpeg \
+    libsm6 \
+    libxext6 \
+    libx11-6 \
+    build-essential \
+    libstdc++6 \
+    freeglut3-dev \
+    nvidia-utils-515 \
+    libnvidia-gl-515-server && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install build-essential -y
-RUN apt-get update && apt-get install libstdc++6 && apt-get install freeglut3-dev -y
+
+

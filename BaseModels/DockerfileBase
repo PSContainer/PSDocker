@@ -36,7 +36,6 @@ RUN apt-get update -y && \
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 && \
     apt-get install libx11-6 && \
-  #   apt-get install build-essential && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

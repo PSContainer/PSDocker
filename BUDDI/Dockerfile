@@ -3,7 +3,7 @@ FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
-# hadolint ignore=DL3008
+# is in the original
 RUN apt-get update -q && \
     apt-get install -q -y --no-install-recommends \
         bzip2 \
@@ -23,6 +23,8 @@ RUN apt-get update -q && \
 
 ENV PATH /opt/conda/bin:$PATH
 
+##################################
+### Anaconda
 CMD [ "/bin/bash" ]
 
 # Leave these args here to better use the Docker build cache
@@ -52,7 +54,9 @@ RUN set -x && \
     find /opt/conda/ -follow -type f -name '*.a' -delete && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda clean -afy
+##################################
 
+# is in the original
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     apt-get install -y g++ gcc && \
@@ -62,30 +66,38 @@ RUN apt-get update && \
     apt-get install -y zip unzip && \
     rm -rf /var/lib/apt/lists/*
 
+    # is in the original
 RUN apt-get update && apt-get install -y \
     libglu1-mesa-dev \
     freeglut3-dev \
     mesa-common-dev && \
     rm -rf /var/lib/apt/lists/*
 
+    # is in the original
 RUN apt-get update && apt-get install -y xvfb 
 
+# is in the original
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     apt-get -y install nano vim && \
     rm -rf /var/lib/apt/lists/*
 
+
+# is in the original
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update && apt-get install nvidia-utils-515 libnvidia-gl-515-server -y && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y libgl1-mesa-glx libegl1-mesa libxrandr2 && \
+    apt-get install -y  libxss1 libgl1-mesa-dev && \
+     rm -rf /var/lib/apt/lists/* # buildkit
+
+###################
+# not in the original
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 && \
     apt-get install libx11-6 && \
-  #   apt-get install build-essential && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install build-essential -y
 RUN apt-get update && apt-get install libstdc++6 && apt-get install freeglut3-dev -y
-
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install nvidia-utils-515 libnvidia-gl-515-server -y && rm -rf /var/lib/apt/lists/*
-RUN apt-get update && apt-get install -y ffmpeg

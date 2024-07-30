@@ -1,12 +1,7 @@
 FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
 
 
-LABEL maintainer="Anaconda, Inc"
-
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
-# Set the environment variables
-ENV TCNN_CUDA_ARCHITECTURES="70;75;80"
-ENV NVCC_PREPEND_FLAGS='-ccbin /usr/bin/gcc-9'
 
 # Set non-interactive frontend
 ENV DEBIAN_FRONTEND=noninteractive
@@ -59,14 +54,6 @@ RUN apt-get update && apt-get install -y \
     libgl1-mesa-dev \
     libegl1-mesa-dev \
     libgles2-mesa-dev \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-    # CudSolver Sitch 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    pkg-config \
-    nvidia-cuda-dev \
-    ninja-build \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
     

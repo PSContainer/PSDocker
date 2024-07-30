@@ -45,3 +45,8 @@ RUN apt-get update && apt-get install build-essential -y
 RUN apt-get update && apt-get install libstdc++6 && apt-get install freeglut3-dev -y && \
     apt-get update && apt-get install python3-pip python3.8-dev python3.8-distutils python3.8-venv -y
 
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update && \
+        apt-get -y install nano vim && \
+        rm -rf /var/lib/apt/lists/*
+    

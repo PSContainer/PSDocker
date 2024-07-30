@@ -85,7 +85,8 @@ RUN apt-get update && \
 
 # is in the original
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install nvidia-utils-515 libnvidia-gl-515-server -y && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install nvidia-utils-515 libnvidia-gl-515-server -y && \
+ rm -rf /var/lib/apt/lists/*
 RUN apt-get update && apt-get install -y libgl1-mesa-glx libegl1-mesa libxrandr2 && \
     apt-get install -y  libxss1 libgl1-mesa-dev && \
      rm -rf /var/lib/apt/lists/* # buildkit

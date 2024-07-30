@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
+FROM nvidia/cuda:11.7.1-devel-ubuntu20.04
 
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
@@ -78,14 +78,9 @@ RUN apt-get update && \
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 && \
     apt-get install libx11-6 && \
-  #   apt-get install build-essential && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install build-essential -y
 RUN apt-get update && apt-get install libstdc++6 && apt-get install freeglut3-dev -y
-
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install nvidia-utils-515 libnvidia-gl-515-server -y && rm -rf /var/lib/apt/lists/*
-RUN apt-get update && apt-get install -y ffmpeg

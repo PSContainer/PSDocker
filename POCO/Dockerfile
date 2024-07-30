@@ -1,6 +1,5 @@
 FROM nvidia/cuda:11.7.1-devel-ubuntu20.04
 
-LABEL maintainer="Anaconda, Inc"
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 

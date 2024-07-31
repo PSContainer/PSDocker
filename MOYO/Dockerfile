@@ -56,17 +56,32 @@ RUN apt-get update && apt-get install -y \
     libglvnd-dev \
     cmake \
     curl \
-    libboost-dev \
     libgl1-mesa-dev \
     libegl1-mesa-dev \
     libgles2-mesa-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Modifications for PSBody -Mesh
+RUN apt-get update && apt-get install -y \ 
+    libeigen3-dev \ 
+    libgmp-dev \ 
+    libgmpxx4ldbl \ 
+    libmpfr-dev \ 
+    libboost-dev \ 
+    libboost-thread-dev \ 
+    build-essential \
+    libcgal-dev \
+    libtbb-dev \ 
+    python3-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+   
+
     # CudSolver Sitch 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     pkg-config \
-    nvidia-cuda-dev \
+   nvidia-cuda-dev \
     ninja-build \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*

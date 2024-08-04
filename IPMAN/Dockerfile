@@ -59,11 +59,13 @@ RUN set -x && \
 # is in the original
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
-    apt-get install -y g++ gcc && \
-    apt-get install --yes software-properties-common && \
-    apt-get install apt-transport-https ca-certificates -y && \
+    apt-get install -y software-properties-common apt-transport-https ca-certificates && \
+    add-apt-repository ppa:ubuntu-toolchain-r/test && \
+    apt-get update && \
+    apt-get install -y gcc-11 g++-11 zip unzip && \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 120 --slave /usr/bin/g++ g++ /usr/bin/g++-11 && \
+    update-alternatives --set gcc /usr/bin/gcc-11 && \
     apt-get clean && \
-    apt-get install -y zip unzip && \
     rm -rf /var/lib/apt/lists/*
 
     # is in the original

@@ -58,13 +58,14 @@ RUN set -x && \
 
 # is in the original
 ENV DEBIAN_FRONTEND noninteractive
+
 RUN apt-get update && \
     apt-get install -y software-properties-common apt-transport-https ca-certificates && \
     add-apt-repository ppa:ubuntu-toolchain-r/test && \
     apt-get update && \
-    apt-get install -y gcc-11 g++-11 zip unzip && \
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 120 --slave /usr/bin/g++ g++ /usr/bin/g++-11 && \
-    update-alternatives --set gcc /usr/bin/gcc-11 && \
+    apt-get install -y gcc-10 g++-10 zip unzip && \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 --slave /usr/bin/g++ g++ /usr/bin/g++-10 && \
+    update-alternatives --set gcc /usr/bin/gcc-10 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -94,10 +95,10 @@ RUN apt-get update && apt-get install nvidia-utils-515 libnvidia-gl-515-server -
 # not in the original
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 && \
-    apt-get install libx11-6 && \
+    apt-get -y install libx11-6 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install build-essential -y
-RUN apt-get update && apt-get install libstdc++6 && apt-get install freeglut3-dev -y
+RUN apt-get update && apt-get -y install libstdc++6 && apt-get install freeglut3-dev -y

@@ -63,9 +63,9 @@ RUN apt-get update && \
     apt-get install -y software-properties-common apt-transport-https ca-certificates && \
     add-apt-repository ppa:ubuntu-toolchain-r/test && \
     apt-get update && \
-    apt-get install -y gcc-10 g++-10 zip unzip && \
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 --slave /usr/bin/g++ g++ /usr/bin/g++-10 && \
-    update-alternatives --set gcc /usr/bin/gcc-10 && \
+    apt-get install -y gcc-9 g++-9 zip unzip && \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 99 --slave /usr/bin/g++ g++ /usr/bin/g++-9 && \
+    update-alternatives --set gcc /usr/bin/gcc-9 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

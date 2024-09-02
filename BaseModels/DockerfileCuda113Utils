@@ -40,7 +40,7 @@ RUN apt-get update -q && \
         libglu1-mesa-dev \
         freeglut3-dev \
         mesa-common-dev \
-        xvfb \ 
+        xvfb \
         libx11-6 \
         libgl1-mesa-glx \
         libegl1-mesa \
@@ -64,7 +64,6 @@ RUN apt-get update -q && \
 
 
 # Install Miniconda
-ARG CONDA_VERSION=py311_24.1.2-0
 RUN set -x && \
     UNAME_M="$(uname -m)" && \
     MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-${UNAME_M}.sh" && \
@@ -75,6 +74,11 @@ RUN set -x && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate base" >> ~/.bashrc && \
     /opt/conda/bin/conda clean -afy
+
+# Install NVIDIA-specific utilities (if not already included in base image)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    nvidia-utils-515 && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set the command
 CMD [ "/bin/bash" ]

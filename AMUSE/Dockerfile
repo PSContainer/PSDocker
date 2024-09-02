@@ -27,6 +27,9 @@ ENV PATH /opt/conda/bin:$PATH
 ### Anaconda
 CMD [ "/bin/bash" ]
 
+# Leave these args here to better use the Docker build cache
+ARG CONDA_VERSION=py311_24.1.2-0
+
 RUN set -x && \
     UNAME_M="$(uname -m)" && \
     if [ "${UNAME_M}" = "x86_64" ]; then \
@@ -95,4 +98,51 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install build-essential -y
 RUN apt-get update && apt-get install libstdc++6 && apt-get install freeglut3-dev -y
 
+# Set environment variables
+ENV PATH /opt/conda/bin:$PATH
 
+# Copy your script into the container
+# COPY setup.sh /opt/setup_script.sh
+
+# Make the script executable
+# RUN chmod +x /opt/setup_script.sh
+
+# Run the script during the image build process
+# RUN /bin/bash -c "/opt/setup_script.sh"
+
+
+
+# # Set up conda environment
+# RUN conda create -n amuse python=3.8 -y
+# SHELL ["conda", "run", "-n", "amuse", "/bin/bash", "-c"]
+
+# # Install conda packages
+# RUN conda install -y pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=11.3 -c pytorch
+# RUN conda install -y anaconda::gxx_linux-64
+
+# # Install pip packages
+# RUN pip install PyYAML smac wandb bvh pandas tqdm smplx pytube pydub einops pytorch3d
+# RUN pip install moviepy matplotlib IPython transforms3d peakutils librosa dtw seaborn
+# RUN pip install torchmetrics wget timm==0.4.5 diffusers gdown
+# RUN pip install textgrid lmdb pyarrow transformers pickle5 prettytable
+
+# # Install PyTorch3D
+# RUN FORCE_CUDA=1 pip install --no-index --no-cache-dir pytorch3d -f https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py38_cu113_pyt1110/download.html
+
+# # Set working directory
+# WORKDIR /amuse
+
+# # Copy amuse.yml file
+# COPY amuse.yml .
+
+# # Update conda environment
+# #RUN conda env update --file amuse.yml --prune -y
+
+# # Activate conda environment by default
+# RUN echo "conda activate amuse" >> ~/.bashrc
+
+# # Set the default command to bash
+# CMD ["/bin/bash"]
+
+# # Default command to run when starting the container
+# # CMD ["/bin/bash"]

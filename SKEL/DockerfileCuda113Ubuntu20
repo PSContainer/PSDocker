@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.7.1-devel-ubuntu20.04 
+FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
 
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
@@ -82,22 +82,6 @@ RUN apt-get update && apt-get install build-essential -y
 RUN apt-get update && apt-get install libstdc++6 && apt-get install freeglut3-dev -y
 
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install -y ffmpeg
-
-RUN apt-get update && apt-get install -y \
-    libnvidia-gl-515-server \
-    libegl1-mesa \
-    libegl1-mesa-dev \
-    xvfb \
-    libosmesa6-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-
-# Update package list and install required packages
-RUN apt-get update && apt-get install -y \
-    libegl1 \
-    libegl1-mesa \
-    libgl1-mesa-glx \
-    libgles2-mesa \
-    && rm -rf /var/lib/apt/lists/*
-    
+RUN apt-get update && apt-get install -y ffmpeg libboost-all-dev && \
+apt-get clean && \
+rm -rf /var/lib/apt/lists/*

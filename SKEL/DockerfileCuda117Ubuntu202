@@ -3,6 +3,8 @@ FROM nvidia/cuda:11.7.1-devel-ubuntu20.04
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
+RUN useradd -d /lustre/home/vfourel -g <gid> -M -N -u <uid> vfourel
+
 # hadolint ignore=DL3008
 RUN apt-get update -q && \
     apt-get install -q -y --no-install-recommends \

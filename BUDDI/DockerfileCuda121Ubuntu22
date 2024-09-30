@@ -72,4 +72,3 @@ RUN apt-get update && \
 
         # is in the original
 RUN apt-get update && apt-get install -y xvfb 
-

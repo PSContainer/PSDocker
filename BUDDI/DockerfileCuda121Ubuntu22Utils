@@ -1,9 +1,14 @@
-FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
+# Start with NVIDIA CUDA 12.1.0 development image based on Ubuntu 22.04
+FROM nvidia/cuda:12.1.0-devel-ubuntu22.04
 
+# Set the maintainer label
+LABEL maintainer="Anaconda, Inc"
 
+# Set environment variables for language and locale
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
-# is in the original
+# Update package lists and install necessary packages
+# hadolint ignore=DL3008 tells the Hadolint Dockerfile linter to ignore a specific rule
 RUN apt-get update -q && \
     apt-get install -q -y --no-install-recommends \
         bzip2 \
@@ -21,6 +26,7 @@ RUN apt-get update -q && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Add Conda to the PATH
 ENV PATH /opt/conda/bin:$PATH
 
 ##################################
@@ -48,51 +54,26 @@ RUN set -x && \
     /opt/conda/bin/conda clean -afy
 ##################################
 
-# is in the original
-ENV DEBIAN_FRONTEND noninteractive
+# Install additional system packages
 RUN apt-get update && \
     apt-get install -y g++ gcc && \
     apt-get install --yes software-properties-common && \
     apt-get install apt-transport-https ca-certificates -y && \
     apt-get clean && \
-    apt-get install -y zip unzip && \
+    apt-get install zip unzip && \
     rm -rf /var/lib/apt/lists/*
 
     # is in the original
-RUN apt-get update && apt-get install -y \
+    RUN apt-get update && apt-get install -y \
     libglu1-mesa-dev \
     freeglut3-dev \
     mesa-common-dev && \
     rm -rf /var/lib/apt/lists/*
 
-    # is in the original
+        # is in the original
 RUN apt-get update && apt-get install -y xvfb 
 
-# is in the original
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && \
-    apt-get -y install nano vim && \
+# Install NVIDIA-specific utilities (if not already included in base image)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    nvidia-utils-515 && \
     rm -rf /var/lib/apt/lists/*
-
-
-# is in the original
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install nvidia-utils-515 libnvidia-gl-515-server -y && \
- rm -rf /var/lib/apt/lists/*
-RUN apt-get update && apt-get install -y libgl1-mesa-glx libegl1-mesa libxrandr2 && \
-    apt-get install -y  libxss1 libgl1-mesa-dev && \
-     rm -rf /var/lib/apt/lists/* # buildkit
-
-###################
-# not in the original
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 && \
-    apt-get install libx11-6 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install build-essential -y
-RUN apt-get update && apt-get install libstdc++6 && apt-get install freeglut3-dev -y
-
-

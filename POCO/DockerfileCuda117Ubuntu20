@@ -49,55 +49,32 @@ RUN set -x && \
 ##################################
 
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && \
-    apt-get install -y g++ gcc && \
-    apt-get install --yes software-properties-common && \
-    apt-get install apt-transport-https ca-certificates -y && \
-    apt-get clean && \
-    apt-get install -y zip unzip && \
-    rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && apt-get install -y \
+    g++ \
+    gcc \
+    software-properties-common \
+    apt-transport-https \
+    ca-certificates \
+    zip \
+    unzip \
     libglu1-mesa-dev \
     freeglut3-dev \
-    mesa-common-dev && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update && apt-get install -y xvfb 
-
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && \
-    apt-get -y install nano vim && \
-    rm -rf /var/lib/apt/lists/*
-
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 && \
-    apt-get install libx11-6 && \
-  #   apt-get install build-essential && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install build-essential -y
-RUN apt-get update && apt-get install libstdc++6 && apt-get install freeglut3-dev -y
-
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install -y ffmpeg
-
-RUN apt-get update && apt-get install -y \
+    mesa-common-dev \
+    xvfb \
+    nano \
+    vim \
+    ffmpeg \
+    libsm6 \
+    libxext6 \
+    libx11-6 \
+    build-essential \
+    libstdc++6 \
     libnvidia-gl-515-server \
     libegl1-mesa \
     libegl1-mesa-dev \
-    xvfb \
     libosmesa6-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-
-# Update package list and install required packages
-RUN apt-get update && apt-get install -y \
-    libegl1 \
-    libegl1-mesa \
     libgl1-mesa-glx \
     libgles2-mesa \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-    

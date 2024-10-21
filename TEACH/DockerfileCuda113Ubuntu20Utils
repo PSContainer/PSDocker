@@ -1,10 +1,14 @@
-FROM nvidia/cuda:11.3.1-cudnn8-devel-ubuntu20.04
+FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
 
 
 # Set environment variables
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PATH /opt/conda/bin:$PATH
+ENV PATH=/opt/conda/bin:$PATH
+
+# Consolidate and optimize apt-get installs
+# Update and install essential packages in small groups to identify potential conflicts
+# Consolidate and optimize apt-get installs
 
 # Consolidate and optimize apt-get installs
 # Update and install essential packages in small groups to identify potential conflicts
@@ -41,7 +45,7 @@ RUN apt-get update -q && \
         libglu1-mesa-dev \
         freeglut3-dev \
         mesa-common-dev \
-        xvfb \
+        xvfb \ 
         libx11-6 \
         libgl1-mesa-glx \
         libegl1-mesa \
@@ -62,7 +66,6 @@ RUN apt-get update -q && \
     apt-get install -q -y --no-install-recommends \
         ffmpeg \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
-
 
 ##################################
 ### Anaconda
@@ -93,3 +96,52 @@ RUN set -x && \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nvidia-utils-515 && \
     rm -rf /var/lib/apt/lists/*
+
+    # Set up conda environment
+RUN conda update -n base -c defaults conda
+
+# Create a new conda environment
+RUN conda create -n py27 python=2.7
+
+# Initialize conda in bash
+RUN echo "conda init bash" >> ~/.bashrc
+
+# Activate conda environment and install packages
+RUN echo ". /opt/conda/etc/profile.d/conda.sh && \
+    conda activate py27 && \
+    python -m ensurepip --default-pip && \
+    pip install numpy==1.16.6 scipy==1.2.3 && \
+    pip install tqdm chumpy==0.69" >> ~/.bashrc
+
+# Set the default command to run when starting the container
+CMD ["/bin/bash", "-l"]
+
+
+# Set shell to bash
+SHELL ["/bin/bash", "-c"]
+
+# Update conda and create a new conda environment named 'teach' with Python 3.9
+RUN conda update -n base -c defaults conda && \
+    conda create -n teach python=3.9 -y
+
+# Activate the conda environment
+RUN echo "conda activate teach" >> ~/.bashrc
+
+# Create a pip virtual environment in /opt/
+RUN mkdir -p /opt/teach-env && \
+    /opt/conda/envs/teach/bin/python -m venv /opt/teach-env
+
+# Set environment variables
+ENV PATH="/opt/teach-env/bin:$PATH"
+
+# Activate the pip virtual environment and install packages
+RUN source /opt/teach-env/bin/activate && \
+    pip install --upgrade pip==23.0.1 && \
+    pip install numpy==1.23.1 cython && \
+    pip install torch==1.11.0 torchvision==0.12.0 torchaudio==0.11.0 && \
+    pip install transformers==4.44.2 huggingface-hub==0.23.3 safetensors==0.4.1 regex==2020.6.8 tokenizers==0.19.1 && \
+    pip install pytorch-lightning==1.5.0 lightning-utilities==0.11.7 packaging==24.1 fsspec==2024.9.0 torchmetrics==1.4.1 tqdm==4.66.5 --no-deps && \
+    pip install PyYAML==6.0.2
+
+# Set the default command to activate the virtual environment
+CMD ["bash", "-c", "source /opt/teach-env/bin/activate && /bin/bash"]

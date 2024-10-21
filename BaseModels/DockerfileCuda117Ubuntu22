@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.7.1-devel-ubuntu20.04
+FROM nvidia/cuda:11.7.1-devel-ubuntu22.04
 
 # Set environment variables
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8

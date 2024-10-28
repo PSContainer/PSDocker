@@ -1,4 +1,5 @@
-FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
+FROM nvidia/cuda:11.7.1-devel-ubuntu20.04
+
 
 # Set environment variables
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
@@ -62,12 +63,10 @@ RUN apt-get update -q && \
         ffmpeg \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+
 ##################################
 ### Anaconda
-CMD [ "/bin/bash" ]
-
-# Leave these args here to better use the Docker build cache
-ARG CONDA_VERSION=py311_24.1.2-0
+#CMD [ "/bin/bash" ]
 
 RUN set -x && \
     UNAME_M="$(uname -m)" && \
@@ -90,11 +89,50 @@ RUN set -x && \
     /opt/conda/bin/conda clean -afy
 ##################################
 
+RUN  apt-get update -q && \
+  apt-get install python3-venv -q -y  && \
+   apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install NVIDIA-specific utilities (if not already included in base image)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    nvidia-utils-515 && \
-    rm -rf /var/lib/apt/lists/*
 
-# Set the command
-CMD [ "/bin/bash" ]
+RUN eval "$(conda shell.bash hook)"
+
+# Set up conda environment
+#RUN conda update -n base -c defaults conda
+
+# Create a new conda environment
+RUN conda create -n py27 python=2.7 -y
+
+# Initialize conda in bash
+RUN echo "conda init bash" >> ~/.bashrc
+
+# Activate conda environment and install packages
+RUN echo ". /opt/conda/etc/profile.d/conda.sh && \
+    conda activate py27 && \
+    python -m ensurepip --default-pip && \
+    pip install numpy==1.16.6 scipy==1.2.3 && \
+    pip install tqdm chumpy==0.69" >> ~/.bashrc
+
+# Set the default command to run when starting the container
+# CMD ["/bin/bash", "-l"]
+
+
+# # Set shell to bash
+# SHELL ["/bin/bash", "-c"]
+
+# ... (previous Dockerfile contents)
+
+# Copy the setup script into the container
+COPY setup_environment.sh /setup_environment.sh
+#COPY requirements.txt /requirements.txt
+
+# Make the script executable
+RUN chmod +x /setup_environment.sh
+
+# Run the setup script
+RUN /setup_environment.sh
+
+# Set the environment variable for the PATH
+ENV PATH="/opt/sinc-env/bin:$PATH"
+
+# Set the default command to activate the virtual environment
+CMD ["bash", "-c", "source /opt/sinc-env/bin/activate && /bin/bash"]

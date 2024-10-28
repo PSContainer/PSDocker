@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
+FROM nvidia/cuda:11.0.3-devel-ubuntu20.04
 
 # Set environment variables
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
@@ -40,7 +40,7 @@ RUN apt-get update -q && \
         libglu1-mesa-dev \
         freeglut3-dev \
         mesa-common-dev \
-        xvfb \
+        xvfb \ 
         libx11-6 \
         libgl1-mesa-glx \
         libegl1-mesa \
@@ -89,12 +89,3 @@ RUN set -x && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda clean -afy
 ##################################
-
-
-# Install NVIDIA-specific utilities (if not already included in base image)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    nvidia-utils-515 && \
-    rm -rf /var/lib/apt/lists/*
-
-# Set the command
-CMD [ "/bin/bash" ]

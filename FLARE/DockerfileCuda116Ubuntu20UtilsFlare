@@ -126,39 +126,14 @@ RUN apt-get update && apt-get install -y nano && \
     rm -rf /var/lib/apt/lists/*
 
 
-# Create and activate flare environment
-RUN conda create -n flare python=3.9 && \
-    echo "conda activate flare" >> ~/.bashrc
+# Copy the setup script into the container
+COPY setup_environment_flare.sh /setup_environment_flare.sh
 
-SHELL ["conda", "run", "-n", "flare", "/bin/bash", "-c"]
+# Make the script executable
+RUN chmod +x /setup_environment_flare.sh
 
-# Install PyTorch
-RUN pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu116
-
-# Install other conda packages
-RUN conda install -c fvcore -c iopath -c conda-forge fvcore iopath && \
-    conda install -c bottler nvidiacub && \
-    conda install https://anaconda.org/pytorch3d/pytorch3d/0.7.5/download/linux-64/pytorch3d-0.7.5-py39_cu116_pyt1131.tar.bz2
-
-# Install pip packages
-RUN pip install ninja imageio PyOpenGL glfw xatlas gdown PyOpenGL_accelerate && \
-    pip install git+https://github.com/NVlabs/nvdiffrast/
-
-# Set environment variables
-ENV TCNN_CUDA_ARCHITECTURES="70;75;80"
-ENV NVCC_PREPEND_FLAGS='-ccbin /usr/bin/gcc-9'
-ENV CUDA_HOME=/usr/local/cuda-11.6
-ENV PATH=$CUDA_HOME/bin:$PATH
-ENV LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
-
-# Install tiny-cuda-nn
-RUN pip install --global-option="--no-networks" git+https://github.com/NVlabs/tiny-cuda-nn#subdirectory=bindings/torch
-
-# Install additional packages
-RUN pip install imageio==2.19.5 scikit-image==0.20.0 numpy==1.23.1 matplotlib==3.6.1 && \
-    pip install gpytoolbox opencv-python trimesh==3.21.7 chumpy lpips tqdm configargparse open3d shapely && \
-    pip install git+https://github.com/jonbarron/robust_loss_pytorch
-
+# Run the setup script
+RUN /setup_environment_flare.sh
 # Download freeimage
 RUN python -c "import imageio; imageio.plugins.freeimage.download()"
 

@@ -51,8 +51,8 @@ RUN apt-get update -q && \
 # Group 3 - Build tools and compilers
 RUN apt-get update -q && \
     apt-get install -q -y --no-install-recommends \
-        g++ \
-        gcc \
+        g++-7 \
+        gcc-7 \
         build-essential \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -62,9 +62,14 @@ RUN apt-get update -q && \
         ffmpeg \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+    # Install NVIDIA-specific utilities (if not already included in base image)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+nvidia-utils-515 && \
+rm -rf /var/lib/apt/lists/*
+
 ##################################
 ### Anaconda
-CMD [ "/bin/bash" ]
+# CMD [ "/bin/bash" ]
 
 # Leave these args here to better use the Docker build cache
 ARG CONDA_VERSION=py311_24.1.2-0
@@ -90,10 +95,7 @@ RUN set -x && \
     /opt/conda/bin/conda clean -afy
 
 
-# Install NVIDIA-specific utilities (if not already included in base image)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    nvidia-utils-515 && \
-    rm -rf /var/lib/apt/lists/*
+
 
 RUN  apt-get update -q && \
   apt-get install python3-venv -q -y  && \
@@ -121,4 +123,4 @@ RUN /setup_environment.sh
 ENV PATH="/opt/deca-env/bin:$PATH"
 
 # Set the default command to activate the virtual environment
-CMD ["bash", "-c", "source /opt/sinc-env/bin/activate && /bin/bash"]
+CMD ["bash", "-c", "source /opt/deca-env/bin/activate && /bin/bash"]

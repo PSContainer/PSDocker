@@ -29,4 +29,4 @@ pip install wandb==0.18.5 joblib==1.4.2
 pip install pandas==2.2.3
 pip install opencv-python==4.10.0.84
 pip install moviepy==1.0.3
-pip install smplx==0.1.28  einops==0.8.0 more_itertools==10.5.0 trimesh==4.5.0 pyrender==0.1.45 torchmetrics==0.7.2
+pip install smplx==0.1.28  einops==0.8.0 more_itertools==10.5.0 trimesh==3.10.5 pyrender==0.1.45 torchmetrics==0.7.2

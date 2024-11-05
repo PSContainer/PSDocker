@@ -1,8 +1,5 @@
 FROM nvidia/cuda:11.6.1-cudnn8-devel-ubuntu20.04
-
-# docker build -t cuda11.6.1-cudnn8-devel-ubuntu20-cuda-dev-base -f DockerfileBase .
-# docker tag cuda11.6.1-cudnn8-devel-ubuntu20-cuda-dev-base pscontainer/flare:cuda11.6.1-cudnn8-devel-ubuntu20-cuda-dev-base
-# docker push pscontainer/flare:cuda11.6.1-cudnn8-devel-ubuntu20-cuda-dev-base
+# works on the cluster for flare
 
 LABEL maintainer="Anaconda, Inc"
 
@@ -77,7 +74,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN add-apt-repository ppa:graphics-drivers/ppa && \
     apt-get update
 
-# Install NVIDIA drivers and libcusolver
 
 
 ENV PATH /opt/conda/bin:$PATH
@@ -85,6 +81,7 @@ ENV PATH /opt/conda/bin:$PATH
 # Set environment variables for OpenGL
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility,graphics
+
 ##################################
 ### Anaconda
 CMD [ "/bin/bash" ]

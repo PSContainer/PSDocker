@@ -1,5 +1,4 @@
-FROM nvidia/cuda:11.6.1-cudnn8-devel-ubuntu20.04
-# working version on Docker
+FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
 
 # Set environment variables
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
@@ -41,7 +40,7 @@ RUN apt-get update -q && \
         libglu1-mesa-dev \
         freeglut3-dev \
         mesa-common-dev \
-        xvfb \
+        xvfb \ 
         libx11-6 \
         libgl1-mesa-glx \
         libegl1-mesa \
@@ -52,8 +51,8 @@ RUN apt-get update -q && \
 # Group 3 - Build tools and compilers
 RUN apt-get update -q && \
     apt-get install -q -y --no-install-recommends \
-        g++-9 \
-        gcc-9 \
+        g++-7 \
+        gcc-7 \
         build-essential \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -63,19 +62,16 @@ RUN apt-get update -q && \
         ffmpeg \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-
-# CudSolver Sitch 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    pkg-config \
-   # nvidia-cuda-dev \
-    ninja-build \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-   
+    RUN  apt-get update -q && \
+    apt-get install python3-venv -q -y  && \
+     apt-get clean && rm -rf /var/lib/apt/lists/*
+  
 
 ##################################
 ### Anaconda
-CMD [ "/bin/bash" ]
+
+# Leave these args here to better use the Docker build cache
+ARG CONDA_VERSION=py311_24.1.2-0
 
 RUN set -x && \
     UNAME_M="$(uname -m)" && \
@@ -96,3 +92,30 @@ RUN set -x && \
     find /opt/conda/ -follow -type f -name '*.a' -delete && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda clean -afy
+##################################
+RUN  apt-get update -q && \
+  apt-get install python3-venv -q -y  && \
+   apt-get clean && rm -rf /var/lib/apt/lists/*
+# Needed Packages for Singularity 
+RUN apt-get update && apt-get install -y \
+ nvidia-utils-515 \
+ libnvidia-gl-515-server && \
+ rm -rf /var/lib/apt/lists/*
+ 
+ 
+ RUN eval "$(conda shell.bash hook)"
+ 
+# Copy the setup script into the container
+COPY setup_environment_pixie.sh /setup_environment_pixie.sh
+
+# Make the script executable
+RUN chmod +x /setup_environment_pixie.sh
+
+# Run the setup script
+RUN /setup_environment_pixie.sh
+
+# Set the environment variable for the PATH
+ENV PATH="/opt/pixie-env/bin:$PATH"
+
+# Set the default command to activate the virtual environment
+CMD ["bash", "-c", "source /opt/pixie-env/bin/activate && /bin/bash"]

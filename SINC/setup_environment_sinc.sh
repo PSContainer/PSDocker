@@ -26,7 +26,7 @@ pip install colorlog==6.6.0 confection==0.0.4 cymem==2.0.7 decorator==4.4.2 dock
 pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
 pip install executing==0.8.3 filelock==3.6.0 freetype-py==2.2.0 frozenlist==1.3.0 fsspec==2022.2.0 future==0.18.2 gitdb==4.0.9 google-auth==2.6.2 google-auth-oauthlib==0.4.6 grpcio==1.44.0 huggingface-hub==0.4.0 hydra-colorlog==1.2.0 hydra-core==1.3.2 idna==3.3 imageio==2.16.1 imageio-ffmpeg==0.4.5 importlib-metadata==4.11.3 ipdb==0.13.9 ipython==8.1.1 jedi==0.18.1 Jinja2==3.1.2 joblib==1.1.0 langcodes==3.3.0 lightning-utilities==0.8.0 lit==16.0.0 loguru==0.6.0 Markdown==3.3.6
 
-pip install MarkupSafe==2.1.2 matplotlib-inline==0.1.3 more-itertools==9.1.0 moviepy==1.0.3 mpmath==1.3.0 multidict==6.0.2 murmurhash==1.0.9 networkx==2.7.1 numpy==1.22.3
+pip install MarkupSafe==2.1.2 matplotlib-inline==0.1.3 more-itertools==9.1.0 moviepy==1.0.3 mpmath==1.3.0 multidict==6.0.2 murmurhash==1.0.9 networkx==2.7.1
 
 pip install nvidia-cublas-cu11==11.10.3.66 nvidia-cuda-cupti-cu11==11.7.101 nvidia-cuda-nvrtc-cu11==11.7.99 nvidia-cuda-runtime-cu11==11.7.99 nvidia-cudnn-cu11==8.5.0.96 nvidia-cufft-cu11==10.9.0.58 nvidia-curand-cu11==10.2.10.91 nvidia-cusolver-cu11==11.4.0.1 nvidia-cusparse-cu11==11.7.4.91 nvidia-nccl-cu11==2.14.3 nvidia-nvtx-cu11==11.7.91
 
@@ -38,5 +38,5 @@ pip install pyasn1==0.4.8 pyasn1-modules==0.2.8 pydantic==1.10.2 pyDeprecate==0.
 
 pip install pytz==2021.3 PyYAML==6.0 regex==2022.3.15 requests==2.27.1 requests-oauthlib==1.3.1 rsa==4.8 sacremoses==0.0.49 scipy==1.8.0 sentry-sdk==1.5.8 setproctitle==1.3.2
 
-pip install shortuuid==1.0.8 six==1.16.0 smart-open==6.3.0 smmap==5.0.0 smplx==0.1.28
+pip install shortuuid==1.0.8 six==1.16.0 smart-open==6.3.0 smmap==5.0.0 smplx==0.1.28 numpy==1.23.1
 

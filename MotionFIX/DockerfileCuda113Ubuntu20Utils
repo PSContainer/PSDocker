@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.7.1-devel-ubuntu20.04
+FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
 
 
 # Set environment variables
@@ -63,10 +63,14 @@ RUN apt-get update -q && \
         ffmpeg \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+    # Install NVIDIA-specific utilities (if not already included in base image)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+nvidia-utils-515 && \
+rm -rf /var/lib/apt/lists/*
 
 ##################################
 ### Anaconda
-#CMD [ "/bin/bash" ]
+CMD [ "/bin/bash" ]
 
 RUN set -x && \
     UNAME_M="$(uname -m)" && \
@@ -122,16 +126,19 @@ RUN echo ". /opt/conda/etc/profile.d/conda.sh && \
 # ... (previous Dockerfile contents)
 
 # Copy the setup script into the container
-COPY setup_environment_sinc.sh /setup_environment_sinc.sh
+COPY setup_environment.sh /setup_environment.sh
 
 # Make the script executable
-RUN chmod +x /setup_environment_sinc.sh
+RUN chmod +x /setup_environment.sh
 
 # Run the setup script
-RUN /setup_environment_sinc.sh
+RUN /setup_environment.sh
 
 # Set the environment variable for the PATH
-ENV PATH="/opt/sinc-env/bin:$PATH"
+ENV PATH="/opt/mfix-env/bin:$PATH"
 
 # Set the default command to activate the virtual environment
-CMD ["bash", "-c", "source /opt/sinc-env/bin/activate && /bin/bash"]
+CMD ["bash", "-c", "source /opt/mfix-env/bin/activate && /bin/bash"]
+
+
+

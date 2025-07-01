@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.7.1-devel-ubuntu20.04
+FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu20.04
 
 
 # Set environment variables
@@ -63,10 +63,9 @@ RUN apt-get update -q && \
         ffmpeg \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-
 ##################################
 ### Anaconda
-#CMD [ "/bin/bash" ]
+CMD [ "/bin/bash" ]
 
 RUN set -x && \
     UNAME_M="$(uname -m)" && \
@@ -88,50 +87,3 @@ RUN set -x && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda clean -afy
 ##################################
-
-RUN  apt-get update -q && \
-  apt-get install python3-venv -q -y  && \
-   apt-get clean && rm -rf /var/lib/apt/lists/*
-
-
-RUN eval "$(conda shell.bash hook)"
-
-# Set up conda environment
-#RUN conda update -n base -c defaults conda
-
-# Create a new conda environment
-RUN conda create -n py27 python=2.7 -y
-
-# Initialize conda in bash
-RUN echo "conda init bash" >> ~/.bashrc
-
-# Activate conda environment and install packages
-RUN echo ". /opt/conda/etc/profile.d/conda.sh && \
-    conda activate py27 && \
-    python -m ensurepip --default-pip && \
-    pip install numpy==1.16.6 scipy==1.2.3 && \
-    pip install tqdm chumpy==0.69" >> ~/.bashrc
-
-# Set the default command to run when starting the container
-# CMD ["/bin/bash", "-l"]
-
-
-# # Set shell to bash
-# SHELL ["/bin/bash", "-c"]
-
-# ... (previous Dockerfile contents)
-
-# Copy the setup script into the container
-COPY setup_environment_sinc.sh /setup_environment_sinc.sh
-
-# Make the script executable
-RUN chmod +x /setup_environment_sinc.sh
-
-# Run the setup script
-RUN /setup_environment_sinc.sh
-
-# Set the environment variable for the PATH
-ENV PATH="/opt/sinc-env/bin:$PATH"
-
-# Set the default command to activate the virtual environment
-CMD ["bash", "-c", "source /opt/sinc-env/bin/activate && /bin/bash"]

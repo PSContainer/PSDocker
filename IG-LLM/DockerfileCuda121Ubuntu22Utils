@@ -72,7 +72,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
         # is in the original
-RUN apt-get update && apt-get install -y xvfb 
+RUN apt-get update && apt-get install -y xvfb blender
 
 # Install NVIDIA-specific utilities (if not already included in base image)
 RUN apt-get update && apt-get install -y --no-install-recommends \
